@@ -31,6 +31,7 @@ ser = serial.Serial(
     bytesize=serial.EIGHTBITS
 )
 
+
 def get_power_state():
     """Get the projector's current power state
 
