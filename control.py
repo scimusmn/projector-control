@@ -100,3 +100,16 @@ def power_off():
         time.sleep(1)
         print "power_off - powering off"
         send_serial_command('RC POWER_OFF')
+
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='Control the projector 0.0.1')
+
+    #ser = serial.Serial(DEVICE,BAUD,timeout=1)
+    if(ser.isOpen() is False):
+        ser.open()
+
+    if arguments['--on'] is True:
+        power_on()
+    if arguments['--off'] is True:
+        power_off()
