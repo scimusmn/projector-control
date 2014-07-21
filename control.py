@@ -103,7 +103,7 @@ def power_off():
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Control the projector 0.0.1')
+    arguments = docopt(__doc__, version='Projector Control 0.0.1')
 
     #ser = serial.Serial(DEVICE,BAUD,timeout=1)
     if(ser.isOpen() is False):
