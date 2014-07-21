@@ -19,9 +19,6 @@ from docopt import docopt
 import time
 import serial
 
-# Seconds to wait for serial responses
-RESPONSEWAIT = 1
-
 # Configure the serial connection
 ser = serial.Serial(
     # We're using a KeySpan USB to Serial Adapter and the provided driver
@@ -50,12 +47,26 @@ def get_power_state():
         'g:POWER=ON2OFF' = ON-> OFF in transition
     """
     print "Getting current power state"
-    ser.write('GET POWER' + '\r\n')
+    power_state = send_serial_command('GET POWER')
+    return power_state
+
+
+def send_serial_command(string):
+    """Send a serial command
+
+    Returns:
+        A string of the serial response to the command
+    """
+    # Write the command
+    print 'Command: ' + string
+    ser.write(string + '\r\n')
+
+    # Wait a second and then listen for the response until the receive
+    # buffer is fully empty
+    time.sleep(1)
     response = ''
-    time.sleep(RESPONSEWAIT)
     while ser.inWaiting() > 0:
         response += ser.read(1)
-    print '\tProjector power state: ' + response
-    response = response.replace('\n', '').replace('\r', '')
-    return response
 
+    print 'Response: ' + response
+    return response
