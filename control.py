@@ -17,3 +17,4 @@ Options:
 """
 from docopt import docopt
 import time
+import serial
