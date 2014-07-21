@@ -71,3 +71,32 @@ def send_serial_command(string):
 
     print 'Response: ' + response
     return response
+
+
+def power_on():
+    """Turn the projector on
+
+    We only want to do this when the projector is all the way off
+    """
+    print
+    print "power_on"
+    if get_power_state() != 'g:POWER=OFF':
+        print "power_on - power is not fully off"
+    else:
+        time.sleep(1)
+        print "power_on - powering on"
+        send_serial_command('POWER ON')
+
+
+def power_off():
+    """Turn the projector OFF
+
+    We only want to do this when the projector is all the way ON
+    """
+    print "power_off"
+    if get_power_state() != 'g:POWER=ON':
+        print "power_off - power is not on"
+    else:
+        time.sleep(1)
+        print "power_off - powering off"
+        send_serial_command('RC POWER_OFF')
