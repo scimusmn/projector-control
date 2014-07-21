@@ -76,16 +76,29 @@ def send_serial_command(string):
 def power_on():
     """Turn the projector on
 
-    We only want to do this when the projector is all the way off
+    We can only do this when the projector is all the way OFF
+    If the projector is in it's transitional shutdown state it won't turn on.
+    To handle this we try to turn it on for a period of time.
     """
-    print
-    print "power_on"
-    if get_power_state() != 'g:POWER=OFF':
-        print "power_on - power is not fully off"
-    else:
+    power_state = get_power_state()
+
+    if power_state == 'g:POWER=ON':
+        print 'The projector is already on'
+        exit()
+    elif power_state == 'g:POWER=OFF':
+        print 'Powering the projector on'
         time.sleep(1)
-        print "power_on - powering on"
         send_serial_command('POWER ON')
+    else:
+        # Re-establish the power state and check every 5 seconds
+        # Once the projector is fully off, turn it on.
+        while get_power_state() != 'g:POWER=OFF':
+            print 'Power is not all the way off. Trying again in 5 seconds.'
+            time.sleep(5)
+        else:
+            print 'Powering the projector on'
+            time.sleep(1)
+            send_serial_command('POWER ON')
 
 
 def power_off():
